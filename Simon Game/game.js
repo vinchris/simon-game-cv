@@ -1,14 +1,18 @@
 var gamePattern = [];
-gamePattern.push(randomChosenColour);
 
 var buttonColours = ["red", "blue", "green", "yellow"];
 
-var randomChosenColour = buttonColours[nextSequence()];
-
 function nextSequence() {
   var randomNumber = Math.floor(Math.random() * 4);
-  console.log(randomNumber);
-  return randomNumber;
-}
+  var randomChosenColour = buttonColours[randomNumber];
+  gamePattern.push(randomChosenColour);
 
-$("#" + randomChosenColour).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+  $("#" + randomChosenColour)
+    .fadeOut(200)
+    .fadeIn(200)
+    .fadeOut(200)
+    .fadeIn(200);
+
+  var audio = new Audio("./sounds/" + randomChosenColour + ".mp3");
+  audio.play();
+}
