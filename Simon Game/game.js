@@ -2,7 +2,8 @@ var gamePattern = [];
 var userClickedPattern = [];
 
 var level = 0;
-$("#level-title").html("Press A Key to Start<br /> Level " + level);
+var initialText = "Press Any Key to Start";
+$("#level-title").html(initialText); // initial h1 text when loading the page or after game over
 
 var buttonColours = ["red", "blue", "green", "yellow"];
 
@@ -15,12 +16,11 @@ function nextSequence() {
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
 
-  $("#" + randomChosenColour)
-    .fadeOut(100)
-    .fadeIn(100);
+  animateNextSequenceBlock(randomChosenColour);
   playSound(randomChosenColour);
+
   level += 1;
-  $("#level-title").html("Press A Key to Start<br /> Level " + level);
+  $("#level-title").html("Level " + level); // after successfully completed a sequence, it will append the level
   console.log("Level [" + level + "] Game Pattern: " + gamePattern);
 }
 
@@ -38,6 +38,16 @@ $(".btn").on("click", function () {
 
   checkAnswer(level);
 });
+
+/**
+ * helper method
+ * @param {*} name
+ */
+function animateNextSequenceBlock(randomChosenColour) {
+  $("#" + randomChosenColour)
+    .fadeOut(200)
+    .fadeIn(200);
+}
 
 /**
  * helper method
@@ -88,6 +98,7 @@ function checkAnswer(currentLevel) {
 }
 
 function gameOver() {
+  playSound("wrong");
   $("#level-title")
     .addClass("game-over")
     .delay(2000)
@@ -96,5 +107,7 @@ function gameOver() {
       next();
     });
   level = 0;
-  $("#level-title").html("Press A Key to Start<br /> Level " + level);
+  $("#level-title").html(
+    "!Game Over!<br /> To Restart, please refresh page ..."
+  );
 }
