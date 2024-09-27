@@ -2,6 +2,7 @@ var gamePattern = [];
 var userClickedPattern = [];
 
 var level = 0;
+var started = false;
 var initialText = "Press Any Key to Start";
 $("#level-title").html(initialText); // initial h1 text when loading the page or after game over
 
@@ -24,7 +25,13 @@ function nextSequence() {
   console.log("Level [" + level + "] Game Pattern: " + gamePattern);
 }
 
-$(document).one("keypress", nextSequence); // first keypress ONLY
+$(document).keypress(function() {
+  if (!started) {
+    $("#level-title").text("Level " + level);
+    nextSequence();
+    started = true;
+  }
+}); // first keypress ONLY
 
 var userChosenColour;
 $(".btn").on("click", function () {
@@ -99,15 +106,20 @@ function checkAnswer(currentLevel) {
 
 function gameOver() {
   playSound("wrong");
-  $("#level-title")
+  $("body")
     .addClass("game-over")
-    .delay(2000)
+    .delay(200)
     .queue(function (next) {
       $(this).removeClass("game-over");
       next();
     });
+  $("#level-title").html("!Game Over!<br /> Press any key to restart ...");
+  startOver();
+}
+
+function startOver() {
   level = 0;
-  $("#level-title").html(
-    "!Game Over!<br /> To Restart, please refresh page ..."
-  );
+  gamePattern = [];
+  userClickedPattern = [];
+  started = false;
 }
